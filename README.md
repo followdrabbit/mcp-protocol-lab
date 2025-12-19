@@ -1,9 +1,3 @@
-Perfeito 👍
-Abaixo está o **README.md completo, revisado e atualizado**, já incorporando a seção de **Requisitos e Configurações Necessárias**, com linguagem técnica clara e pronto para uso no GitHub.
-
----
-
-````markdown
 # MCP Protocol Lab
 
 📚 Central repository for studying, experimenting, and documenting the **Model Context Protocol (MCP)**.
@@ -20,6 +14,7 @@ Abaixo está o **README.md completo, revisado e atualizado**, já incorporando a
 ---
 
 ## 📂 Repository Structure
+
 ```text
 .
 ├── docs/        # Conceptual documentation and study notes
@@ -27,7 +22,7 @@ Abaixo está o **README.md completo, revisado e atualizado**, já incorporando a
 ├── examples/    # Minimal working examples
 ├── references/  # Articles, specs, and external resources
 └── README.md
-````
+```
 
 ---
 
