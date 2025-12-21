@@ -1,4 +1,4 @@
-# 🧪 Lab 07 – MCP Server for API Calls (Cryptocurrency Prices)
+# 🧪 Lab 07 – MCP Server: API Calls (Cryptocurrency Prices)
 
 ## 🎯 Lab Objective
 
@@ -18,6 +18,7 @@ This lab introduces **API integration patterns** in MCP Servers.
 
 * How to call external REST APIs from an MCP Server
 * How to expose API-backed logic as MCP tools
+* Dependency management and runtime environments in MCP
 * Error handling and timeouts in MCP tools
 * How MCP enables LLMs to access live, real-world data
 
@@ -28,7 +29,7 @@ This lab introduces **API integration patterns** in MCP Servers.
 * This lab uses the **CoinGecko public API**
 * No API key is required
 * The API is **rate-limited**
-* This implementation is for **learning purposes**, not high-scale production use
+* This implementation is for **learning purposes**, not production-scale usage
 
 ---
 
@@ -94,7 +95,7 @@ uv add requests
 ### Why these packages?
 
 * **mcp[cli]** → MCP server, client, inspector, installer
-* **requests** → Simple HTTP client for REST API calls
+* **requests** → HTTP client for REST API calls
 
 ---
 
@@ -145,15 +146,12 @@ if __name__ == "__main__":
 
 ## 🧠 How This MCP Server Works
 
-1. The tool `get_cryptocurrency_price` is exposed via MCP
-2. When called:
+* Exposes a tool: `get_cryptocurrency_price`
+* Makes a real-time HTTP request to CoinGecko
+* Parses the JSON response
+* Returns live pricing data to the MCP client
 
-   * It sends an HTTP request to CoinGecko
-   * Parses the JSON response
-   * Extracts the USD price
-3. The result is returned as plain text to the MCP client
-
-This is a **live API-backed MCP tool**.
+This is a **live API-backed MCP Server**.
 
 ---
 
@@ -161,30 +159,25 @@ This is a **live API-backed MCP tool**.
 
 Before integrating with Claude, validate the server locally.
 
-### ▶️ Start MCP Inspector
-
 ```bash
 mcp dev crypto.py
 ```
 
-### 🌐 In the MCP Inspector Web UI
+### In the MCP Inspector Web UI
 
 1. Click **Connect**
 2. Go to **Tools**
 3. Click **List Tools**
 4. Select **get_cryptocurrency_price**
-5. Provide a value, for example:
+5. Test with:
 
    * `bitcoin`
    * `ethereum`
-6. Click **Run Tool**
 
 ### ✅ Expected Result
 
-Example output:
-
 ```
-The price of bitcoin is $65432 USD.
+The price of bitcoin is $XXXXX USD.
 ```
 
 (Actual value will vary.)
@@ -193,20 +186,64 @@ The price of bitcoin is $65432 USD.
 
 ## 🔌 Step 7 – Install the MCP Server in Claude Desktop
 
-Install the server so Claude can invoke it:
+### Option A – Automatic Installation
 
 ```bash
 mcp install crypto.py
 ```
 
-If your server depends on a virtual environment (recommended), ensure Claude uses `uv run` as shown in previous labs.
+⚠️ **Important:**
+During testing, this method caused runtime errors related to the `requests` library.
+
+---
+
+## ⚠️ Important Note – Claude Installation & Dependency Resolution
+
+When installing the Crypto MCP Server in Claude, an error occurred because **Claude was not executing the server inside the correct Python environment**, causing the `requests` library to fail at runtime.
+
+### 🧠 Why This Happens
+
+* `mcp install` may register the MCP Server using **system Python**
+* Dependencies installed via `uv` are isolated in a virtual environment
+* Claude may not automatically activate this environment
+* As a result, libraries like `requests` are not found
+
+---
+
+## ✅ Solution – Explicit UV Execution in Claude Configuration
+
+To ensure correct dependency resolution, manually update the Claude MCP configuration.
+
+### 📄 Edit `claude_desktop_config.json`
+
+Add or update the Crypto MCP Server configuration as follows:
+
+```json
+{
+  "mcpServers": {
+    "Crypto": {
+      "command": "C:\\Users\\Raphael\\AppData\\Roaming\\Python\\Python312\\Scripts\\uv.EXE",
+      "args": [
+        "--directory",
+        "C:\\Users\\Raphael\\repos\\mcp-protocol-lab\\Labs\\Lab 07 - MCP Server for API Calls",
+        "run",
+        "crypto.py"
+      ]
+    }
+  }
+}
+```
+
+> 🔧 Adjust paths according to your local environment.
 
 ---
 
 ## 🔄 Step 8 – Restart Claude Desktop
 
-* Fully **Quit** Claude Desktop (do not just close the window)
-* Reopen the application to load the new MCP Server
+After updating the configuration:
+
+* Fully **Quit** Claude Desktop (use *Quit*, not just close)
+* Reopen Claude to load the new MCP Server configuration
 
 ---
 
@@ -223,29 +260,27 @@ or
 ### ✅ Expected Behavior
 
 * Claude requests permission to call the **Crypto** MCP Server
-* The `get_cryptocurrency_price` tool is executed
-* Claude responds with live price data from CoinGecko
-
-You should also see the **Crypto** tool listed in Claude’s connectors/tools panel.
+* The tool executes using the correct environment
+* Claude responds with live pricing data from CoinGecko
+* The **Crypto** tool appears in Claude’s connectors/tools panel
 
 ---
 
 ## 🧩 Troubleshooting
 
-### API returns an error
+### Price not found
 
-* Ensure you are using valid CoinGecko IDs (`bitcoin`, not `BTC`)
-* Check internet connectivity
+* Use valid CoinGecko IDs (`bitcoin`, not `BTC`)
 
-### Rate limits
+### Runtime errors
 
-* CoinGecko may temporarily block excessive requests
-* Add caching or throttling in future versions
+* Ensure Claude uses `uv run`
+* Confirm `requests` is installed in the active environment
 
-### Claude can’t execute the server
+### Rate limiting
 
-* Ensure the MCP Server is executed with `uv run`
-* Verify `requests` is installed in the correct virtual environment
+* CoinGecko may temporarily block excessive calls
+* Add caching or throttling as a future improvement
 
 ---
 
@@ -253,32 +288,31 @@ You should also see the **Crypto** tool listed in Claude’s connectors/tools pa
 
 By the end of this lab, you will have:
 
-* An MCP Server that calls an external API
-* A tool that returns live cryptocurrency prices
-* A working integration between MCP, APIs, and LLMs
+* A working MCP Server that calls an external API
+* Correct dependency handling via UV
+* Claude Desktop successfully invoking the server
+* Live cryptocurrency prices available to an LLM
 
 ---
 
 ## 📌 Key Takeaways
 
-* MCP Servers can safely expose **live external data**
-* REST APIs integrate naturally as MCP tools
-* This pattern is foundational for:
+* MCP Servers often require **explicit runtime control**
+* Dependency isolation matters when integrating with Claude
+* API-backed MCP tools unlock **real-time intelligence**
+* This pattern scales to:
 
-  * Market data assistants
-  * Monitoring dashboards
-  * Financial analysis copilots
-  * Risk and pricing engines
+  * Market data
+  * Monitoring
+  * Risk analysis
+  * Financial copilots
 
 ---
 
 ## 📌 Conclusion
 
-This lab demonstrates how MCP extends LLM capabilities beyond static knowledge by integrating **real-time APIs**.
+This lab reinforces an essential MCP lesson:
 
-You now have MCP examples covering:
+> **Correct execution context is as important as correct code.**
 
-* Local state (files)
-* OS interaction (screenshots)
-* Remote services (APIs)
-* External data sources (crypto markets)
+With this fix, your MCP Server is robust, predictable, and production-aligned.
