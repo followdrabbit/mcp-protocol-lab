@@ -1,0 +1,10 @@
+Teste do MCP addd notes
+
+
+Top 5 LLMs:
+1. GPT-4 (OpenAI) - Modelo multimodal avançado com excelente raciocínio
+2. Claude 3.5 Sonnet (Anthropic) - Equilíbrio entre inteligência e eficiência
+3. Gemini Ultra (Google) - Modelo multimodal poderoso com integração ao ecossistema Google
+4. Llama 3 (Meta) - Modelo open-source de alto desempenho
+5. Mistral Large (Mistral AI) - Modelo europeu com forte capacidade multilíngue
+
