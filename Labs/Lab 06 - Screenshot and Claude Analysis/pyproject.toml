@@ -1,0 +1,11 @@
+[project]
+name = "lab-06-screenshot-and-claude-analysis"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "mcp[cli]>=1.25.0",
+    "pillow>=12.0.0",
+    "pyautogui>=0.9.54",
+]
