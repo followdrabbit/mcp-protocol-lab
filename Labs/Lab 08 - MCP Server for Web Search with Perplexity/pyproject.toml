@@ -1,0 +1,10 @@
+[project]
+name = "lab-08-mcp-server-for-web-search-with-perplexity"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "mcp[cli]>=1.25.0",
+    "openai>=2.14.0",
+]
