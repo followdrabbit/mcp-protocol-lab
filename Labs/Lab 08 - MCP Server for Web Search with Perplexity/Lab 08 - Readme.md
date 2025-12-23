@@ -338,3 +338,9 @@ By the end of this lab, you will have:
   * News monitoring agents
   * Threat intelligence tools
   * Market analysis copilots
+
+## 📌 Conclusion
+
+This lab completes a major MCP capability:
+
+> **Bringing real-time web knowledge into LLM workflows through explicit, permission-based tools.**

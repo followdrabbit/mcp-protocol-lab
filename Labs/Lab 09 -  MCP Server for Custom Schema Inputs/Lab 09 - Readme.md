@@ -284,3 +284,7 @@ By the end of this lab, you will have:
   * Incident reports
   * Risk assessments
   * Enterprise workflows
+
+## 📌 Conclusion
+
+This lab demonstrates how MCP supports **strongly typed tool inputs** — moving from “string prompts” to **validated, structured data**.
