@@ -208,12 +208,6 @@ mcp dev resources.py
 
 ## 🔌 Step 7 – Install the MCP Server in Claude Desktop
 
-### ❌ Correction from Original Notes
-
-> The original instructions referenced `prompt.py`, which is **incorrect** for this lab.
-
-### ✅ Correct Installation Command
-
 ```bash
 mcp install resources.py
 ```
