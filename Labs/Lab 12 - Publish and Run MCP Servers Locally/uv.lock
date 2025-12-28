@@ -259,9 +259,9 @@ wheels = [
 ]
 
 [[package]]
-name = "lab-12-publicar-e-implantar-servidores-mcp"
+name = "lab-12-publish-and-run-mcp-servers-locally"
 version = "0.1.0"
-source = { editable = "." }
+source = { virtual = "." }
 dependencies = [
     { name = "mcp", extra = ["cli"] },
 ]
