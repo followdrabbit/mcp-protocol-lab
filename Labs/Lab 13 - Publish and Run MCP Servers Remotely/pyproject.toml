@@ -1,0 +1,10 @@
+[project]
+name = "lab-13-publish-and-run-mcp-servers-remotely"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "mcp-remote>=0.1.0",
+    "mcp[cli]>=1.25.0",
+]
